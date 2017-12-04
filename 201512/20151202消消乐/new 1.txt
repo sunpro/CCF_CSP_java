@@ -1,0 +1,60 @@
+//消除行相同的
+		int count = 0;
+		for(int i = 0; i < row; i++){
+			count = 0;
+			for(int j = 0; j < column - 1; j++){
+				if(matrix1[i][j] == matrix1[i][j+1]) count++;
+				else{
+					if(count < 3) count = 0;
+					else{
+						for(int k = j - count + 1; k <= j; k++){
+							matrix1[i][k] = 0;
+						}
+						count = 0;
+					}
+				}
+			}
+		}
+		//output m1
+		for(int i = 0; i < row; i++){
+			for(int j = 0; j < column; j++){
+				System.out.print(matrix1[i][j] + " ") ;
+			}
+			System.out.println();
+		}
+		//消除列相同的
+		for(int i = 0; i < column; i++){
+			count = 0;
+			for(int j = 0; j < row - 1; j++){
+				if(matrix1[j][i] == matrix1[j+1][i]) count++;
+				else{
+					if(count < 3) count = 0;
+					else{
+						for(int k = j - count + 1; k <= j; k++){
+							matrix2[k][i] = 0;
+						}
+						count = 0;
+					}
+				}
+			}
+		}
+		//output m1
+		for(int i = 0; i < row; i++){
+			for(int j = 0; j < column; j++){
+				System.out.print(matrix2[i][j] + " ") ;
+			}
+			System.out.println();
+		}
+		//求积然后平方得到最终结果
+		for(int i = 0; i < row; i++){
+			for(int j = 0; j < column; j++){
+				System.out.print(Math.sqrt(matrix1[i][j] * matrix2[i][j]) + " ");
+			}
+			System.out.println();
+		}
+		
+4 5
+1 1 1 1 1
+2 1 2 3 4
+2 1 2 2 2
+3 1 2 3 4		

@@ -1,0 +1,75 @@
+3
+rd
+wr:3
+rt:4
+4
+root 3 rd wr:3 rt:4
+manage 3 rd wr:1 rt:3 
+server 2 rd wr:2 
+client 1 rd 
+5
+sunpro 4 root manage server client
+sun 2 manage server
+sunj 2 manage client
+suns 1 client
+sunl 2 server client
+6
+sunpro rt:4
+sun wr
+sun rt:1
+sunj wr:2
+suns wr
+sunl wr:3
+
+
+
+return 
+true
+2
+true
+false
+false
+false
+
+
+3
+rd
+wr:3
+rt:4
+4
+root 3 rd wr:3 rt:4
+manage 3 rd wr:1 rt:3 
+server 2 rd wr:2 
+client 1 rd 
+5
+sunpro 4 root manage server client
+sun 2 manage server
+sunj 2 manage client
+suns 1 client
+sunl 2 server client
+9
+sunpro rt
+sunpro wr
+sun wr:3
+sun rt:1
+sunj wr:2
+sunj rd
+suns wr
+suns rd
+sunl wr:3
+
+
+result:
+4
+3
+false
+true
+false
+true
+false
+true
+false
+
+
+
+
