@@ -1,96 +1,52 @@
-import java.util.Scanner;
+import java.util.*;
+
 public class Main{
-	public static int num = 0;
-	public static int sumSect = 0;
-	public static int sum = 0;
-	public static int matrix[][];
-	public static void main(String args[]){
+	
+	public static void main(String args[]) {
 		Scanner cin = new Scanner(System.in);
-		num = cin.nextInt();
-		matrix = new int[num][4];
-		for(int i = 0; i < num; i++){
-			for(int j = 0; j < 4; j++){
-				matrix[i][j] = cin.nextInt();
+		int n = cin.nextInt();//输入矩形的个数
+		int[][] mat = new int[n][4];//定义二维数组，存放矩形的横纵坐标
+		//int[4] maxMat = new int[4]; //求取所有输入矩形的范围
+		for(int i=0; i<n; i++){
+			for(int j = 0; j < 4; j++) {
+				mat[i][j] = cin.nextInt();
 			}
 		}
-		for(int i = 0; i < num; i++){
-			for(int j = i + 1; j < num ; j++){
-				sumSect += section(matrix[i],matrix[j]);
+		/*
+		for(int i=0; i<n; i++){
+			for(int j = 0; j < 4; j++) {
+				System.out.print("" + mat[i][j]);
+			}
+			System.out.println();
+		}
+		*/
+		//初始化画布
+		int[][] bg = new int[100][100];
+		//依次将每个矩形输入到画布上：
+		int x1,y1,x2,y2 = 0;
+		for(int i =0; i< n; i++) {
+			
+			x1 = mat[i][0];
+			y1 = mat[i][1];
+			x2 = mat[i][2];
+			y2 = mat[i][3];
+			//System.out.println("x1="+x1+", y1="+y1+", x2="+x2+", y2="+y2);
+			for(int p = x1; p < x2; p++){
+				for(int q = y1; q < y2; q++){
+					bg[p][q] = 1;
+					//System.out.println(bg[p][q]);
+				}
 			}
 		}
-		for(int i = 0; i < num ; i++){
-			sum += (matrix[i][2] - matrix[i][0]) * (matrix[i][3] - matrix[i][1]);
+		//统计画布中黑点的数量；
+		int sumArea = 0;
+		for (int i =0; i < 100; i++) {
+			for (int j = 0; j < 100; j++)
+				sumArea += bg[i][j];
 		}
-		System.out.print(sum - sumSect + "");
+		
+		System.out.println(sumArea);
+		
 	}
-	private static int section(int[] a, int[] b){
-		int s = 0;
-		int up=0, bottom=0, left=0, right = 0;
-		if(a[0] <= b[0] & a[2] > b[0] & a[2] <= b[2]){
-			up = a[2]; 
-			bottom = b[0];
-			if(a[1] <= b[1] & a[3] > b[1] & a[3] <= b[3]){
-				left = b[1];
-				right = a[3];
-			}else if(a[1] <= b[1] & a[3] > b[3]){
-				left = b[1];
-				right = b[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] <= b[3]){
-				left = a[1];
-				right = a[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] > b[3]){
-				left = a[1];
-				right = b[3];
-			}
-		}else if(a[0] <= b[0] & a[2] > b[2]){
-			up = b[2];
-			bottom = b[0];
-			if(a[1] <= b[1] & a[3] > b[1] & a[3] <= b[3]){
-				left = b[1];
-				right = a[3];
-			}else if(a[1] <= b[1] & a[3] > b[3]){
-				left = b[1];
-				right = b[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] <= b[3]){
-				left = a[1];
-				right = a[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] > b[3]){
-				left = a[1];
-				right = b[3];
-			}
-		}else if(a[0] > b[0] & a[0] < b[2] & a[2] <= b[2]){
-			up = a[2];
-			bottom = a[0];
-			if(a[1] <= b[1] & a[3] > b[1] & a[3] <= b[3]){
-				left = b[1];
-				right = a[3];
-			}else if(a[1] <= b[1] & a[3] > b[3]){
-				left = b[1];
-				right = b[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] <= b[3]){
-				left = a[1];
-				right = a[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] > b[3]){
-				left = a[1];
-				right = b[3];
-			}
-		}else if(a[0] > b[0] & a[0] < b[2] & a[2] > b[2]){
-			up = b[2];
-			bottom = a[0];
-			if(a[1] <= b[1] & a[3] > b[1] & a[3] <= b[3]){
-				left = b[1];
-				right = a[3];
-			}else if(a[1] <= b[1] & a[3] > b[3]){
-				left = b[1];
-				right = b[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] <= b[3]){
-				left = a[1];
-				right = a[3];
-			}else if(a[1] > b[1] & a[1] < b[3] & a[3] > b[3]){
-				left = a[1];
-				right = b[3];
-			}
-		}
-		return (up - bottom ) * (right - left);
-	}
+	
 }
