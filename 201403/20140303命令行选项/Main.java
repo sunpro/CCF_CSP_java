@@ -2,22 +2,19 @@ import java.util.*;
 
 public class Main {
 	
-	private static boolean isDebug = false;
-	private static List<Option> listOptions = new ArrayList<Option>();
 	public static void main(String args[]) {
 		Scanner cin = new Scanner(System.in);
 		String formStr = cin.next();//输入格式字符串
 		int N = cin.nextInt();//输入命令行的个数
 		cin.nextLine();
-		String[] commondStrs = new String[N];
-		for(int i=0; i < N; i++) {
+		String[] commondStrs = new String[N]; //只是创建了字符串数组；里面的字符串，还没有创建；
+		for(int i=0; i<N; i++) {
 			commondStrs[i] = cin.nextLine();
 		}
-		if(false)
-			for(int i=0; i < N; i++)
-				System.out.println(commondStrs[i]);
 		//输入完成
+		
 		//解析格式字符串到 listOptions
+		List<Option> listOptions = new ArrayList<Option>();
 		int lenFormStr = formStr.length();
 		for(int i=0; i<lenFormStr; i++) {
 			//检查是不是最后一个字符，防止Index溢出
@@ -33,58 +30,44 @@ public class Main {
 			}	
 		}
 		
-		if(false){
-			System.out.println("所有选项：");
-			for(Option op : listOptions)
-				System.out.println(op);
-		}
 		//逐行解析命令行字符串
 		List<Option> listOpOut;
-		for(int i = 0; i < N; i++){
-			String commondLine = commondStrs[i];
-			
+		int i = 0;
+		for(String commondLine : commondStrs){
 			//初始化命令行选项List
 			listOpOut = new ArrayList<Option>();
 			//空格分割
 			String[] opsStr = commondLine.split(" ");
 			//根据opsStr的长度，判断有无选项：长度为1为无选项；>1为有选项
 			if(opsStr.length == 1){
-				System.out.println("Case " + (i+1) + ": ");
+				System.out.println("Case " + (++i) + ": ");
 				continue;
 			}
-			String opStr = "";
+			
 			String argStr = "";
 			for(int j = 1; j < opsStr.length; j++){
-				opStr = opsStr[j];
-				if(opStr.charAt(0) != '-')
+				
+				//判断选项名是否合法：
+				Option op = islegalOption(listOptions, opsStr[j]);
+				if(op == null)//返回null为不合法；
 					break;
-				//-后面必须跟单个的字符，所以要判断一下是不是单个的
-				if(opStr.length() > 2)
-					break;
-				Option op = opFactory(listOptions, opStr.charAt(1));
-				//判断是不是合法选项：
-				if(op == null)//未找到该选项；
-					break;
+					
 				//判断是否是带参选项
 				if(!op.getHasArg()){//无参选项
 					Option o = opFactory(listOpOut, op.getName());
 					if(o == null)
 						listOpOut.add(op);
-					//continue;
 				}
 				else {//有参选项
-					if(isDebug)
-						System.out.println("有参数：" + op);
-					//首先判断后面有没有参数，如果后面没有字符串了，肯定不肯能。
+					//首先判断后面有没有参数，如果后面没有字符串了，肯定不可能。
 					if(++j >= opsStr.length) //虽然是带参选项，但是没有带参数
 						break;
 					argStr = opsStr[j];
-					if(isDebug)
-						System.out.println("有参数：参数为：" + argStr);
-					//判断参数是否合法:小写字母,数字和减号组成的非空字符串
-					if(!isLegal(argStr))
-						break;
 					
+					//判断参数是否合法:小写字母,数字和减号组成的非空字符串
+					if(!islegalArg(argStr))
+						break;
+					//添加选项
 					Option o = opFactory(listOpOut, op.getName());
 					if(o == null){
 						op.setArg(argStr);
@@ -94,10 +77,12 @@ public class Main {
 					}
 				}
 			}
+			
 			//把改行的选项按名称顺序排序
 			Collections.sort(listOpOut);
+			
 			//输出
-			System.out.print("Case " + (i+1) + ":");
+			System.out.print("Case " + (++i) + ":");
 			for(Option op : listOpOut)
 				System.out.print(op.toString());
 			System.out.println();
@@ -106,9 +91,20 @@ public class Main {
 		
 	}
 	
+	/**判断选项名是否合法
+	 *返回null为不合法
+	 */
+	private static Option islegalOption(List<Option> listOptions, String opStr) {
+		//判断选项名是否合法：'-' + 一个小写字母共两个字符
+		if(opStr.length() > 2 || opStr.charAt(0) != '-')
+			return null;
+		//判断选项名是否合法：是否是给出的选项名；
+		return opFactory(listOptions, opStr.charAt(1));
+	}
+	
 	/**判断参数是否合法
 	 */
-	private static boolean isLegal(String argStr){
+	private static boolean islegalArg(String argStr){
 		char[] argCharArr = argStr.toCharArray();
 		for(char c : argCharArr)
 			if(!((c>= '0' && c <='9') || (c >= 'a' && c<='z') || c == '-'))
@@ -143,6 +139,7 @@ class Option implements Comparable<Option>{
 	public Option(char name, boolean hasArg){
 		this.name = name;
 		this.hasArg = hasArg;
+		this.arg = "";
 	}
 	
 	public char getName(){
