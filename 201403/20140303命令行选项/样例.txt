@@ -1,0 +1,11 @@
+az:bde:fi:
+4
+br -z 5 -b -i 110 -z 99 aaaaa
+lslsa 
+daf -e 3 -e 7 -a 
+br -bb -d -f -i 8 -i 10 -i -a -i -1aa
+Êä³ö
+Case 1: -b -i 110 -z 99
+Case 2: 
+Case 3: -a -e 7
+Case 4: -b -d -f -i 10
